@@ -10,8 +10,6 @@ Go in your Node.js terminal.
 -git clone https://github.com/paulrotar/DAT504 
 cd DAT504
 npm install
-bower install p5js
-bower install angular-load 
-bower install angular
+bower install
 
 ```
