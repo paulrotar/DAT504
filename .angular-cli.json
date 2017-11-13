@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "ng4-playground"
+    "name": "Consumption"
   },
   "apps": [
     {
@@ -9,7 +9,8 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "test.png"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -21,7 +22,13 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+          "../bower_components/p5js/lib/p5.js",
+          "../bower_components/angular/angular.js",
+          "../bower_components/angular-load/dist/angular-load.min.js",
+          "../angular-p5.js",
+          "./app/example.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
