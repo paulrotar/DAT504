@@ -24,6 +24,8 @@ angular.module('example', [
       var imglogo = p.loadImage('/assets/logomic.png');
       var imgback = p.loadImage('/assets/buttonback.png');
       var playic = p.loadImage('/assets/playtrans.png');
+      var colorm = p.loadImage('/assets/colorbmeniu.png');
+      var available = p.loadImage('/assets/available.png')
       var rectlenght1;
       var rectlenght2;
       var rectlenght3;
@@ -244,7 +246,6 @@ angular.module('example', [
     p.options = function() {
         p.image(imgback,414, 163);
         p.fill(black);
-        p.text(p.mouseX + " spaceee " + p.mouseY, screenwidth/2, screenheight/2);
         p.fill ( orange );
         p.text("Options",screenwidth/2,225);
         p.fill(blue);
@@ -255,8 +256,17 @@ angular.module('example', [
         p.fill(blue);
         p.textSize(60);
         p.text("Color blind modes",screenwidth/2,307);
-        p.text("Sound effects/Music",screenwidth/2,screenheight/2 + 50)
+        p.text("Sound effects/Music",screenwidth/2,screenheight/2 + 50);
         p.pop();
+        
+        p.push();
+        p.imageMode(p.CENTER);
+        p.image(colorm,screenwidth/2,400);
+        if (p.mouseX > 489 && p.mouseX < 1422 && p.mouseY > 349 && p.mouseY < 449){
+            p.image(available,screenwidth/2,400);
+        }
+        p.pop();
+        
         
     };
       
