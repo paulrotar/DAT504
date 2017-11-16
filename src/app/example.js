@@ -44,7 +44,7 @@ angular.module('example', [
       var name;
       var orderurl;
       var order;
-      var ordernumber = parseInt(p.random(13));
+      var ordernumber;
 
    if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ){
            p.setup = function() {
@@ -72,6 +72,7 @@ angular.module('example', [
       p.angleMode(p.DEGREES);
         angle = 0;
         anglep = 0;
+        ordernumber = parseInt(p.random(13))
     };
 
     p.draw = function() {
@@ -265,7 +266,6 @@ angular.module('example', [
         p.image(tod, screenwidth/2 + 250, 630);
         p.pop();
         p.push();
-        p.text(p.mouseX + " spaceee " + p.mouseY, screenwidth/2, screenheight/2);
         if(p.mouseX > 1011 && p.mouseX < 1404 && p.mouseY > 319 && p.mouseY < 480 ){
             p.imageMode(p.CENTER);
             p.image(coming,screenwidth/2 + 250, 400)
@@ -288,7 +288,6 @@ angular.module('example', [
         p.fill(black);
         p.text(order[ordernumber].question, screenwidth/2, screenheight/2);
         p.image(imgback,414, 163);
-        
     };
       
     p.instructions = function() {
@@ -371,7 +370,12 @@ angular.module('example', [
         if ( part == 6 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
         }
-        
+        if ( part == 7 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
+            part = 3;
+        }
+        if ( part == 7){
+            ordernumber = parseInt(p.random(13));
+        }
         
         
     };
