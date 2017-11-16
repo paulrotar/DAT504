@@ -25,7 +25,12 @@ angular.module('example', [
       var imgback = p.loadImage('/assets/buttonback.png');
       var playic = p.loadImage('/assets/playtrans.png');
       var colorm = p.loadImage('/assets/colorbmeniu.png');
-      var available = p.loadImage('/assets/available.png')
+      var available = p.loadImage('/assets/available.png');
+      var coming = p.loadImage('/assets/comingsoon.png');
+      var guesswho = p.loadImage('/assets/guesswho.png');
+      var guessorder = p.loadImage('/assets/guessorder.png');
+      var saboteur = p.loadImage('/assets/saboteur.png');
+      var tod = p.loadImage('/assets/tod.png');
       var rectlenght1;
       var rectlenght2;
       var rectlenght3;
@@ -37,6 +42,9 @@ angular.module('example', [
       var url;
       var login;
       var name;
+      var orderurl;
+      var order;
+      var ordernumber = parseInt(p.random(13));
 
    if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ){
            p.setup = function() {
@@ -50,6 +58,8 @@ angular.module('example', [
         name = "nousername";
        /* url = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
         p.loadJSON(url,p.gotData) */
+        orderurl = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/consumptionOrder?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
+        p.loadJSON(orderurl,p.gotOrder)
     }
       
     p.setup = function() {
@@ -79,6 +89,9 @@ angular.module('example', [
         if (part == 3 ) {
            p.play();
        }
+        if (part == 7 ) {
+            p.game();
+        }
         if (part == 4 ) {
            p.instructions();
        }
@@ -90,10 +103,14 @@ angular.module('example', [
        }
     };
             
-    p.gotData = function(data){
+/*    p.gotData = function(data){
         login = data;
-    }
+    }*/
           
+      p.gotOrder = function(orderdata){
+          order = orderdata;
+      }        
+            
     p.mainmenu = function() {
         //p.print(p.windowWidth + " spaceeee " + p.windowHeight);
         p.textAlign( p.CENTER );
@@ -233,8 +250,45 @@ angular.module('example', [
       
     p.play = function() {
         p.fill(blue);
-        p.text(p.mouseX + " spaceee " + p.mouseY, screenwidth/2, screenheight/2);
         p.image(imgback,414, 163);
+        p.fill ( orange );
+        p.text("Select your play mode",screenwidth/2,225);
+        p.fill(blue);
+        p.rectMode(p.CENTER);
+        p.rect(screenwidth/2,250,750,5,5);
+        p.rectMode(p.CORNER);
+        p.push();
+        p.imageMode(p.CENTER);
+        p.image(guessorder,screenwidth/2 - 250, 400);
+        p.image(saboteur,screenwidth/2 + 250, 400);
+        p.image(guesswho, screenwidth/2 - 250, 630);
+        p.image(tod, screenwidth/2 + 250, 630);
+        p.pop();
+        p.push();
+        p.text(p.mouseX + " spaceee " + p.mouseY, screenwidth/2, screenheight/2);
+        if(p.mouseX > 1011 && p.mouseX < 1404 && p.mouseY > 319 && p.mouseY < 480 ){
+            p.imageMode(p.CENTER);
+            p.image(coming,screenwidth/2 + 250, 400)
+            p.imageMode(p.CORNER);
+        }
+        if(p.mouseX > 511 && p.mouseX < 904 && p.mouseY > 549 && p.mouseY < 710 ){
+            p.imageMode(p.CENTER);
+            p.image(coming,screenwidth/2 - 250, 630)
+            p.imageMode(p.CORNER);
+        }
+        if(p.mouseX > 1011 && p.mouseX < 1404 && p.mouseY > 549 && p.mouseY < 710  ){
+            p.imageMode(p.CENTER);
+            p.image(coming,screenwidth/2 + 250, 630)
+            p.imageMode(p.CORNER);
+        }
+        p.pop();
+    };
+            
+    p.game = function() {
+        p.fill(black);
+        p.text(order[ordernumber].question, screenwidth/2, screenheight/2);
+        p.image(imgback,414, 163);
+        
     };
       
     p.instructions = function() {
@@ -245,7 +299,6 @@ angular.module('example', [
       
     p.options = function() {
         p.image(imgback,414, 163);
-        p.fill(black);
         p.fill ( orange );
         p.text("Options",screenwidth/2,225);
         p.fill(blue);
@@ -301,6 +354,10 @@ angular.module('example', [
         
         if ( part == 3 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
+        }
+        
+        if ( part == 3 && p.mouseX > 511 && p.mouseX < 904 && p.mouseY > 319 && p.mouseY < 480 ) { 
+            part = 7;
         }
         
         if ( part == 4 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
