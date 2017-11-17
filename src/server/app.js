@@ -11,6 +11,17 @@ app.post('/api/getToDo', function (req, res) {
   toDoServiceObj.getToDo()
 })
 
-app.listen(3000, function () {
-  console.log('To Do Web app service listening on port 3000!')
-})
+var port = 3000;
+var server = app.listen(port);
+var io = require('socket.io')(server);
+console.log('Express started on port ' + port);
+
+app.get("/", function(req, res){
+    res.render('index');
+});
+
+io.on('connection', function (socket){
+    socket.on('drawing', function(data){
+        socket.broadcast.emit('news', data);
+    });
+});

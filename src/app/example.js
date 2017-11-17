@@ -1,3 +1,5 @@
+
+
 angular.module('example', [
   'angular-p5'
 ])
@@ -39,6 +41,7 @@ angular.module('example', [
       var guessorder = p.loadImage('/assets/guessorder.png');
       var saboteur = p.loadImage('/assets/saboteur.png');
       var tod = p.loadImage('/assets/tod.png');
+      var socket = io();
       
       //Shapes for graphics
       var rectlenght1;
@@ -55,6 +58,7 @@ angular.module('example', [
       var orderurl;
       var order;
       var ordernumber;
+      var neworder;
    
    //Adapts screen resolution for phone/tablet users 
    if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ){
@@ -109,7 +113,7 @@ angular.module('example', [
                 };
                 // Positioning all the assets and resizing them to fit to mobile screens 
                 p.mainmenu = function () {
-                    p.print(p.mouseX + "  " + p.mouseY); // shows the mouse positoning so we can get the locations of where we need to make on button clicks/ position assests
+                    //p.print(p.mouseX + "  " + p.mouseY); // shows the mouse positoning so we can get the locations of where we need to make on button clicks/ position assests
                     //p.print(p.windowWidth + " spaceeee " + p.windowHeight);
                     p.textAlign(p.CENTER);
                     p.textSize(20); // text size changes the size of the text 
@@ -424,7 +428,15 @@ angular.module('example', [
       // Gets data from questions database
       p.gotOrder = function(orderdata){
           order = orderdata;
-      }        
+      }
+      
+      socket.on('questionsss', function(dataquest){
+    p.gotQuestions(dataquest);
+      })
+      
+      p.gotQuestions = function(orderssss){
+          neworder=orderssss;
+      }
     
     // Home page
     p.mainmenu = function() {

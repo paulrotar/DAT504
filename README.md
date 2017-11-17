@@ -1,6 +1,6 @@
 # Consumption
 
-This project was generated with the MEANP5 stack ( MEAN stack + P5.js ).
+This project was generated with the MANP5 stack ( MAN stack + P5.js), no express. SOZ :(.
 
 ## Instruction to install
 
@@ -12,7 +12,21 @@ cd DAT504
 npm install
 npm install -g bower
 bower install
+cd src/server
+npm install
+
+*IF EXPRESS WORKS YOU SHOULD RUN THE NEXT COMMANDS*
+node app.js
+cd ..
+cd ..
 npm start
+
+*IF EXPRESS DOESN'T WORK*
+cd ..
+cd ..
+npm start
+
+
 *You can now see it on localhost:4200* 
 
 ```
@@ -56,6 +70,11 @@ Adding comments over the code
 When you try to click the profile button, there is a small square area where the click doesn't interact.
 This probblem appears on mobile too. It might be because an image block the click.
 Still no fix, hopefully there will be one in Version 1.04. 
+
+## Version 1.03b
+
+Failed implementation of express. Continuing with the other targets.
+
 
 ### Target for Version 1.04, final beta version for assignment upload
 
