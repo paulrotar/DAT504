@@ -11,15 +11,20 @@ Go in your Node.js terminal.
 cd DAT504
 npm install
 npm install -g bower
+npm install -g @angular/cli
 bower install
 cd src/server
 npm install
 
-*IF EXPRESS WORKS YOU SHOULD RUN THE NEXT COMMANDS*
-node app.js
-cd ..
-cd ..
-npm start
+*IF EXPRESS WORKS YOU SHOULD RUN THE NEXT INSTRUCTIONS*
+type *node app.js* in terminal
+you sould now see Express started on port 3000
+
+Now you need to get into a new terminal window 
+cd inside the DAT504 folder and run *npm start*
+
+*You can see the web app on localhost:4200*
+
 
 *IF EXPRESS DOESN'T WORK*
 cd ..
@@ -28,6 +33,18 @@ npm start
 
 
 *You can now see it on localhost:4200* 
+
+```
+
+Alternatively if you want to see the webapp on your mobile, please find your computer ip adress, it should be something like this: *192.168.0.somenumber*, and run  
+
+```
+ng serve --host 0.0.0.0
+
+```
+instead of 
+```
+npm start
 
 ```
 
