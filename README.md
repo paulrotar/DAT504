@@ -10,11 +10,14 @@ Go in your Node.js terminal.
 -git clone https://github.com/paulrotar/DAT504 
 cd DAT504
 npm install
+npm install -g bower
 bower install
 npm start
-*Yout can now see it on localhost:4200* 
+*You can now see it on localhost:4200* 
 
 ```
+
+If git is not installed, just download the zip file 
 
 # Version 1.00
 
@@ -31,6 +34,14 @@ Trying to fix issue.
 Received question database.
 Simple implementation.
 A more complex example will be available in next version ( Version 1.02 ).
+
+*KNOWN ISSUES*
+When you try to click the profile button, there is a small square area where the click doesn't interact.
+Still no fix, hopefully there will be one in Version 1.04. 
+
+# Version 1.02
+
+Express implementation failed. Project will continue at the moment without it. An alternative to express might be sockets.io. It it will work, there will be a Version 1.03b update.
 
 *KNOWN ISSUES*
 When you try to click the profile button, there is a small square area where the click doesn't interact.
