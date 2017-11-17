@@ -47,7 +47,21 @@ Express implementation failed. Project will continue at the moment without it. A
 When you try to click the profile button, there is a small square area where the click doesn't interact.
 Still no fix, hopefully there will be one in Version 1.04. 
 
-## Expected updates
+# Version 1.03
+
+Consumption works perfectly on mobile !
+Adding comments over the code
+
+*KNOWN ISSUES*
+When you try to click the profile button, there is a small square area where the click doesn't interact.
+This probblem appears on mobile too. It might be because an image block the click.
+Still no fix, hopefully there will be one in Version 1.04. 
+
+### Target for Version 1.04, final beta version for assignment upload
+
+Implement express, do better graphics, Login system.
+
+# Expected updates
 
 Express implementation in Version 1.04.
 Dedicated mobile/tablet UI in Version 1.05.

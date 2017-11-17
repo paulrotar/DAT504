@@ -4,6 +4,9 @@ angular.module('example', [
 
 .factory('exampleSketch', ['p5', function(p5) {
   return function(p) {
+      
+      //Creating colour scheme for design
+      
       var blue = "#212649" ;
       var darkblue = "#191c37" ;
       var orange = "#ff4e00" ;
@@ -14,8 +17,12 @@ angular.module('example', [
       var yellow = "#e69b23" ;
       var ishyellow = "#794a20" ;
       var darkyellow = "#4d2601" ;
+      
+      //Creates canvas for display size
       var screenwidth = p.windowWidth ;
       var screenheight = p.windowHeight ;
+      
+      //Images and Graphics
       var imagebg = p.loadImage('/assets/test.png');
       var imagecp1 = p.loadImage('/assets/capac1.png');
       var imagecp2 = p.loadImage('/assets/capac2.png');
@@ -32,6 +39,8 @@ angular.module('example', [
       var guessorder = p.loadImage('/assets/guessorder.png');
       var saboteur = p.loadImage('/assets/saboteur.png');
       var tod = p.loadImage('/assets/tod.png');
+      
+      //Shapes for graphics
       var rectlenght1;
       var rectlenght2;
       var rectlenght3;
@@ -46,81 +55,391 @@ angular.module('example', [
       var orderurl;
       var order;
       var ordernumber;
-
+   
+   //Adapts screen resolution for phone/tablet users 
    if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ){
-           p.setup = function() {
-            p.createCanvas( screenwidth, screenheight);
-            p.background ("#000000");
-           }
+           p.preload = function () {
+                    nicefont = p.loadFont('/assets/GochiHand-Regular.ttf');
+                    name = "nousername";
+                    /* url = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
+                     p.loadJSON(url,p.gotData) */
+                    orderurl = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/consumptionOrder?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b'; // connecting to the databases
+                    p.loadJSON(orderurl, p.gotOrder)  
+                };
+                // Set up for canvas
+                p.setup = function () {
+                    p.createCanvas(screenwidth, screenheight);
+                    p.noStroke();
+                    p.textFont(nicefont);
+                    rectlenght1 = 7;
+                    rectlenght2 = 7;
+                    rectlenght3 = 7;
+                    p.angleMode(p.DEGREES);
+                    angle = 0;
+                    anglep = 0;
+                    ordernumber = parseInt(p.random(13))
+                };
+                // Setting up all the parts/ other pages with a white background 
+                p.draw = function () {
+                    p.background(white);
+                    if (part == 1) {
+                        p.mainmenu();
+                    }
+                    if (part == 2) {
+                        p.about();
+                    }
+                    if (part == 3) {
+                        p.play();
+                    }
+                    if (part == 7) {
+                        p.game();
+                    }
+                    if (part == 4) {
+                        p.instructions();
+                    }
+                    if (part == 5) {
+                        p.options();
+                    }
+                    if (part == 6) {
+                        p.profile();
+                    }
+                };
+                p.gotOrder = function (orderdata) {
+                    order = orderdata;
+                };
+                // Positioning all the assets and resizing them to fit to mobile screens 
+                p.mainmenu = function () {
+                    p.print(p.mouseX + "  " + p.mouseY); // shows the mouse positoning so we can get the locations of where we need to make on button clicks/ position assests
+                    //p.print(p.windowWidth + " spaceeee " + p.windowHeight);
+                    p.textAlign(p.CENTER);
+                    p.textSize(20); // text size changes the size of the text 
+                    p.fill(orange);
+                    p.push(); // push and pop, allows us to make changes that only effect this section 
+                    p.imageMode(p.CENTER);
+                    p.image(imglogo, screenwidth / 2, screenheight / 2 - 35); // setting the position of the logo
+                    imglogo.resize(751 / 1.6, 305 / 1.6); // resizing the logo to make it fit on the page
+                    p.pop();
+                    
+                    // Following code is positioning the assets and resizing them to fit on the page 
+                    p.push();
+                    p.imageMode(p.CENTER);
+                    p.image(imgabout, screenwidth / 2 - 250, screenheight / 2 + 125);
+                    imgabout.resize(296 / 1.3, 127 / 1.3);
+
+                    p.image(imgplay, screenwidth / 2, screenheight / 2 + 125);
+                    imgplay.resize(296 / 1.3, 127 / 1.3);
+
+                    p.image(imghelp, screenwidth / 2 + 250, screenheight / 2 + 125);
+                    imghelp.resize(296 / 1.3, 127 / 1.3);
+
+                    p.pop();
+
+                    p.push();
+
+                    p.imageMode(p.CENTER);
+                    p.image(imagecp2, screenwidth / 2 + 300, screenheight / 2 - 135);
+                    imagecp2.resize(178 / 1.5, 175 / 1.5);
+
+                    p.pop();
+
+                    p.push();
+
+                    p.imageMode(p.CENTER);
+                    p.image(imagecp1, screenwidth / 2 - 300, screenheight / 2 - 135);
+                    imagecp1.resize(178 / 1.5, 175 / 1.5);
+
+                    p.pop();
+
+                    p.push();
+
+                    p.rectMode(p.CENTER);
+                    p.fill(blue);
+                    p.rect(screenwidth / 2, 10, 400, 80, 10);
+                    p.fill(white);
+                    p.textSize(37);
+                    p.textAlign(p.CENTER);
+                    if (name === "nousername") {
+                        if (p.mouseX > 760 && p.mouseX < 1158 && p.mouseY > 152 && p.mouseY < 223) {
+                            noprofile = "Please select a profile!";
+                        } else {
+                            noprofile = "No profile selected!";
+                        }
+                        p.text(noprofile, screenwidth / 2, 32);
+                    } else {
+                        p.text("Hello " + name + "!", screenwidth / 2, 32);
+                    }
+                    p.pop();
+
+                    /*  for( var i=0; i<login.length; i++){
+                          if (login[i].username === "paulrotar"){
+                              p.print("hello paul");
+                          }
+                      }
+                      
+                      */
+
+                };
+                // set up for the about page then changing the assests to fit on the page
+                p.about = function () {
+                    p.fill(black);
+                    p.text("This game was developed by Dätmester in 2017", screenwidth / 2, screenheight / 2);
+
+                    p.push
+                    p.image(imgback, 32, 33);
+                    imgback.resize(87 / 1.4, 87 / 1.4)
+                    p.pop
+
+
+                    p.fill(orange);
+                    p.text("About", screenwidth / 2, 60);
+                    p.fill(blue);
+                    p.rectMode(p.CENTER);
+                    p.rect(screenwidth / 2, 70, 500, 5, 5);
+                    p.rectMode(p.CORNER);
+                };
+                // set up for the play page then changing the assests to fit on the page
+                p.play = function () {
+                    p.fill(blue);
+                    p.image(imgback, 32, 36);
+                    imgback.resize(87 / 1.4, 87 / 1.4)
+                    p.fill(orange);
+                    p.text("Select your game mode", screenwidth / 2, 40);
+                    p.fill(blue);
+                    p.rectMode(p.CENTER);
+                    p.rect(screenwidth / 2, 60, 400, 5, 5);
+                    p.rectMode(p.CORNER);
+
+                    p.push();
+                    p.imageMode(p.CENTER);
+                    p.image(guessorder, screenwidth / 2 - 150, 170);
+                    guessorder.resize(399 / 1.4, 167 / 1.4)
+                    p.image(saboteur, screenwidth / 2 + 150, 170);
+                    saboteur.resize(399 / 1.4, 167 / 1.4)
+                    p.image(guesswho, screenwidth / 2 - 150, 300);
+                    guesswho.resize(399 / 1.4, 167 / 1.4)
+                    p.image(tod, screenwidth / 2 + 150, 300);
+                    tod.resize(399 / 1.4, 167 / 1.4)
+                    p.pop();
+                    p.push();
+                    if (p.mouseX > 375 && p.mouseX < 657 && p.mouseY > 113 && p.mouseY < 224) {
+                        p.imageMode(p.CENTER);
+                        p.image(coming, screenwidth / 2 + 150, 170)
+                        coming.resize(399 / 1.4, 167 / 1.4)
+                        p.imageMode(p.CORNER);
+                    }
+
+                    if (p.mouseX > 77 && p.mouseX < 355 && p.mouseY > 244 && p.mouseY < 354) {
+                        p.imageMode(p.CENTER);
+                        p.image(coming, screenwidth / 2 - 150, 300)
+                        coming.resize(399 / 1.4, 167 / 1.4)
+                        p.imageMode(p.CORNER);
+                    }
+                    if (p.mouseX > 375 && p.mouseX < 657 && p.mouseY > 244 && p.mouseY < 351) {
+                        p.imageMode(p.CENTER);
+                        p.image(coming, screenwidth / 2 + 150, 300)
+                        coming.resize(399 / 1.4, 167 / 1.4)
+                        p.imageMode(p.CORNER);
+                    }
+                    p.pop();
+
+                };
+                // set up for the  game then changing the assests to fit on the page
+                p.game = function () {
+                    p.fill(black);
+                    p.text(order[ordernumber].question, screenwidth / 2, screenheight / 2);
+                    p.image(imgback, 32, 36);
+                    imgback.resize(87 / 1.4, 87 / 1.4)
+                };
+                // set up for the instuctionS, then changing the assests to fit on the page
+                p.instructions = function () {
+                    p.fill(yellow);
+                    p.text(  "The person who’s turn it is clicks on the screen and is given a random prompt" , screenwidth / 2, screenheight / 2-40);
+                    p.text(  "(e.g Tallest to shortest). Everyone else lines up and the player then arranges" , screenwidth / 2, screenheight / 2-10);
+                    p.text(  " the others in line with the given order. All the other players then have 3 tries" , screenwidth / 2, screenheight / 2+20);
+                    p.text(  "to guess the order they are in. If they guess right the player does the forfeit," , screenwidth / 2, screenheight / 2+50);
+                    p.text( "if they don’t guess right, everyone else does the forfeit." , screenwidth / 2, screenheight / 2+80);
+                    p.image(imgback, 32, 36);
+                    imgback.resize(87 / 1.4, 87 / 1.4)
+                };
+                // set up for the options then changing the assests to fit on the page
+                p.options = function () {
+                    p.image(imgback, 32, 36);
+                    imgback.resize(87 / 1.4, 87 / 1.4)
+                    p.fill(orange);
+                    p.text("Options", screenwidth / 2, 40);
+                    p.fill(blue);
+                    p.rectMode(p.CENTER);
+                    p.rect(screenwidth / 2, 60, 500, 5, 5);
+                    p.rectMode(p.CORNER);
+                    p.push();
+                    p.fill(blue);
+                    p.textSize(37);
+                    p.text("Color blind modes", screenwidth / 2, 120);
+                    p.text("Sound effects/Music", screenwidth / 2, 160);
+                    p.pop();
+
+                    p.push();
+                    p.imageMode(p.CENTER);
+                    p.image(colorm, screenwidth / 2, screenheight / 2 + 40);
+                    colorm.resize(928 / 1.4, 103 / 1.4)
+                    if (p.mouseX > 40 && p.mouseX < 704 && p.mouseY > 213 && p.mouseY < 278) {
+                        p.image(available, screenwidth / 2, screenheight / 2 + 40);
+                        available.resize(815 / 1.4, 59 / 1.4)
+                    }
+                    p.pop();
+
+                };
+                // set up for the profile then changing the assests to fit on the page
+                p.profile = function () {
+                    p.profile = function () {
+                        p.image(imgback, 32, 33);
+                        imgback.resize(87 / 1.4, 87 / 1.4)
+                    };
+                };
+                // set up for most mousepressed changing the locations of x and ys so when press changes the page
+                p.mousePressed = function () {
+
+                    if (part == 1 && p.mouseX > 20 && p.mouseX < 218 && p.mouseY > 297 && p.mouseY < 374) {
+                        part = 2;
+                    }
+
+                    if (part == 1 && p.mouseX > 267 && p.mouseX < 465 && p.mouseY > 294 && p.mouseY < 364) {
+                        part = 3;
+                    }
+
+                    if (part == 1 && p.mouseX > 513 && p.mouseX < 720 && p.mouseY > 293 && p.mouseY < 370) {
+                        part = 4;
+                    }
+
+                    if (part == 1 && p.mouseX > 603 && p.mouseX < 723 && p.mouseY > 14 && p.mouseY < 129) {
+                        part = 5;
+                    }
+
+                    if (part == 1 && p.mouseX > 11 && p.mouseX < 128 && p.mouseY > 12 && p.mouseY < 129) {
+                        part = 6;
+                    }
+
+                    if (part == 2 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
+                        part = 1;
+                    }
+
+                    if (part == 3 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
+                        part = 1;
+                    }
+
+                    if (part == 3 && p.mouseX > 77 && p.mouseX < 357 && p.mouseY > 112 && p.mouseY < 224) {
+                        part = 7;
+                    }
+
+                    if (part == 4 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
+                        part = 1;
+                    }
+
+                    if (part == 5 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
+                        part = 1;
+                    }
+
+                    if (part == 6 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
+                        part = 1;
+                    }
+                    if (part == 7 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
+                        part = 3;
+                    }
+                    if (part == 7) {
+                        ordernumber = parseInt(p.random(13));
+                    }
+
+                };
         } else {
             
+    //Requests data from database        
     p.preload = function() {
-        nicefont = p.loadFont('/assets/GochiHand-Regular.ttf');
+        nicefont = p.loadFont('/assets/GochiHand-Regular.ttf'); // loading font
         name = "nousername";
+        
+        //Login url
        /* url = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
         p.loadJSON(url,p.gotData) */
+        
+        //Alternative to express
         orderurl = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/consumptionOrder?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
         p.loadJSON(orderurl,p.gotOrder)
     }
       
+    //Setup of the main webpage
     p.setup = function() {
-      p.createCanvas( screenwidth, screenheight);
-      p.noStroke();
-      p.textFont(nicefont);
-        rectlenght1 = 7;
-        rectlenght2 = 7;
-        rectlenght3 = 7;
+        
+      //Create canvas    
+      p.createCanvas( screenwidth, screenheight);    
+      p.noStroke(); // set no stroke for the whole project
+      p.textFont(nicefont); // setting text font for the whole project
+        rectlenght1 = 7;  //
+        rectlenght2 = 7;  // options rectangles
+        rectlenght3 = 7;  //
       p.angleMode(p.DEGREES);
-        angle = 0;
-        anglep = 0;
+        angle = 0;  //
+        anglep = 0; // resolving angle on profile and options button
+        
+        // As random doesn't return a whole number
         ordernumber = parseInt(p.random(13))
     };
-
+            
+    // Looping throught the webpage
     p.draw = function() {
-        p.background ( imagebg );
+        p.background ( imagebg ); // setting background
         
         p.imageMode (p.CENTER);
-        p.image(playic,screenwidth/2,87);
+        p.image(playic,screenwidth/2,87); // little icon at the top of webpage
         p.imageMode (p.CORNER);
+        
+        // Changing menus
         if (part == 1 ) {
-           p.mainmenu();
+           p.mainmenu();        // Main menu
        }
         if (part == 2 ) {
-           p.about();
+           p.about();           // About page
        }
         if (part == 3 ) {
-           p.play();
+           p.play();            // Play page
        }
         if (part == 7 ) {
-            p.game();
+            p.game();           // Guess the order game
         }
         if (part == 4 ) {
-           p.instructions();
+           p.instructions();    // Help page
        }
         if (part == 5 ) {
-           p.options();
+           p.options();         // Options page
        }
         if (part == 6 ) {
-           p.profile();
+           p.profile();         // Profile page
        }
     };
-            
+      
+      // Gets data from the login database
 /*    p.gotData = function(data){
         login = data;
     }*/
-          
+      
+      // Gets data from questions database
       p.gotOrder = function(orderdata){
           order = orderdata;
       }        
-            
+    
+    // Home page
     p.mainmenu = function() {
         //p.print(p.windowWidth + " spaceeee " + p.windowHeight);
-        p.textAlign( p.CENTER );
+        
+        p.textAlign( p.CENTER ); //Align all text
         p.textSize(70);
         p.fill(orange);
+        
+        //Setting logo
         p.imageMode(p.CENTER);
         p.image( imglogo, screenwidth/2, screenheight/2);
         p.imageMode(p.CORNER);
+        
+        //Animations over button - about button
         p.fill(blue);
         p.rect(484,649,295,rectlenght1,10);
         if(p.mouseX > 499 && p.mouseX < 765 && p.mouseY > 662 && p.mouseY < 760){
@@ -135,6 +454,8 @@ angular.module('example', [
                }
            }
         p.image(imgabout,484,649);
+        
+        //Animations over button - play button
         p.fill(blue);
         p.rect(812,649,295,rectlenght2,10);
         if(p.mouseX > 827 && p.mouseX < 1093 && p.mouseY > 662 && p.mouseY < 760){
@@ -149,6 +470,8 @@ angular.module('example', [
                }
            }
         p.image(imgplay,812,649);
+        
+        //Animations over button - help button
         p.fill(blue);
         p.rect(1140,649,295,rectlenght3,10);
         if(p.mouseX > 1155 && p.mouseX < 1420 && p.mouseY > 662 && p.mouseY < 760){
@@ -164,11 +487,12 @@ angular.module('example', [
            }
         p.image(imghelp,1139,649);
         
+        //Animation over profile button
         p.push();
         
         p.imageMode(p.CENTER);
         p.translate(1419,249);
-        p.rotate( angle );
+        p.rotate( angle ); // rotates the picture
         p.image(imagecp2,0,0);
         
         p.pop();
@@ -177,15 +501,16 @@ angular.module('example', [
            angle=angle+1;
             if ( angle == 360){
                 angle = 0;
-                angle=angle+1;
+                angle=angle+1; // Clockwise if you have mouse over
             }
            } else {
                angle=angle-1;
                if(angle<0){
-                   angle = 0;
+                   angle = 0; // Counter-clockwise if you have mouse somewhere else
                }
            }
         
+        //Animation over options button
         p.push();
         
         p.imageMode(p.CENTER);
@@ -199,12 +524,12 @@ angular.module('example', [
            anglep=anglep-1;
             if ( anglep == -360){
                 anglep = 0;
-                anglep=anglep+1;
+                anglep=anglep+1; // Counter-clockwise
             }
            } else {
                anglep=anglep+1;
                if(anglep>0){
-                   anglep = 0;
+                   anglep = 0; // Clockwise
                }
            }
         
@@ -216,6 +541,8 @@ angular.module('example', [
         p.fill(white);
         p.textSize(43);
         p.textAlign(p.CENTER);
+        
+        // If username is not found
         if ( name === "nousername") {
             if ( p.mouseX > 760 && p.mouseX<1158 && p.mouseY>152 && p.mouseY<223){
                 noprofile = "Please select a profile!";
@@ -224,10 +551,12 @@ angular.module('example', [
             }
             p.text(noprofile,screenwidth/2,200);
         } else {
+            //If user is found
             p.text( "Hello " + name + "!",screenwidth/2,200);
         }
         p.pop();
         
+    //login function    
       /*  for( var i=0; i<login.length; i++){
             if (login[i].username === "paulrotar"){
                 p.print("hello paul");
@@ -238,10 +567,12 @@ angular.module('example', [
         
     }
     
+    //About menu
     p.about = function() {
+        
+        
         p.fill(black);
-        p.text(p.mouseX + " spaceee " + p.mouseY, screenwidth/2, screenheight/2);
-        p.image(imgback,414, 163);
+        p.image(imgback,414, 163); //back image
         p.fill ( orange );
         p.text("About",screenwidth/2,230);
         p.fill(blue);
@@ -250,15 +581,18 @@ angular.module('example', [
         p.rectMode(p.CORNER);
     };
       
+    //Play menu        
     p.play = function() {
         p.fill(blue);
-        p.image(imgback,414, 163);
+        p.image(imgback,414, 163); // backbutton
         p.fill ( orange );
         p.text("Select your play mode",screenwidth/2,225);
         p.fill(blue);
         p.rectMode(p.CENTER);
         p.rect(screenwidth/2,250,750,5,5);
         p.rectMode(p.CORNER);
+        
+        //images for each mode
         p.push();
         p.imageMode(p.CENTER);
         p.image(guessorder,screenwidth/2 - 250, 400);
@@ -266,6 +600,8 @@ angular.module('example', [
         p.image(guesswho, screenwidth/2 - 250, 630);
         p.image(tod, screenwidth/2 + 250, 630);
         p.pop();
+        
+        //Coming soon images
         p.push();
         if(p.mouseX > 1011 && p.mouseX < 1404 && p.mouseY > 319 && p.mouseY < 480 ){
             p.imageMode(p.CENTER);
@@ -284,19 +620,21 @@ angular.module('example', [
         }
         p.pop();
     };
-            
+    
+    //Guess the order game        
     p.game = function() {
         p.fill(black);
         p.text(order[ordernumber].question, screenwidth/2, screenheight/2);
         p.image(imgback,414, 163);
     };
       
+    //Help menu
     p.instructions = function() {
         p.fill(yellow);
-        p.text(p.mouseX + " spaceee " + p.mouseY, screenwidth/2, screenheight/2);
         p.image(imgback,414, 163);
     };
       
+    //Options menu        
     p.options = function() {
         p.image(imgback,414, 163);
         p.fill ( orange );
@@ -315,6 +653,8 @@ angular.module('example', [
         p.push();
         p.imageMode(p.CENTER);
         p.image(colorm,screenwidth/2,400);
+        
+        //Color blind coming soon
         if (p.mouseX > 489 && p.mouseX < 1422 && p.mouseY > 349 && p.mouseY < 449){
             p.image(available,screenwidth/2,400);
         }
@@ -322,58 +662,76 @@ angular.module('example', [
         
         
     };
-      
+     
+    //Profile menu        
     p.profile = function() {
         p.image(imgback,414, 163);
     };
     
-    p.mousePressed = function() { 
+    // If mouse pressed functions        
+    p.mousePressed = function() {
+        
+        // If mouse pressed on about go to about
         if ( part == 1 && p.mouseX > 499 && p.mouseX < 765 && p.mouseY > 662 && p.mouseY < 760) {
             part = 2;
         }
         
+        // If mouse pressed on play go to play
         if ( part == 1 && p.mouseX > 827 && p.mouseX < 1093 && p.mouseY > 662 && p.mouseY < 760) {
             part = 3;
         }
         
+        // If mouse pressed on help go to help
         if ( part == 1 && p.mouseX > 1155 && p.mouseX < 1420 && p.mouseY > 662 && p.mouseY < 760) {
             part = 4;
         }
-        
+       
+        // If mouse pressed on options go to options
         if ( part == 1 && p.mouseX > 1352 && p.mouseX < 1477 && p.mouseY > 185 && p.mouseY < 307) {
             part = 5;
         }
         
+        // If mouse pressed on profile go to profile
         if ( part == 1 && p.mouseX > 433 && p.mouseX < 562 && p.mouseY > 185 && p.mouseY < 307) {
             part = 6;
         }
         
+        //Go back button
         if ( part == 2 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
         }
         
+        //Go back button
         if ( part == 3 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
         }
         
+        //Guess the order game
         if ( part == 3 && p.mouseX > 511 && p.mouseX < 904 && p.mouseY > 319 && p.mouseY < 480 ) { 
             part = 7;
         }
         
+        //Go back button
         if ( part == 4 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
         }
         
+        //Go back button
         if ( part == 5 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
         }
         
+        //Go back button
         if ( part == 6 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
         }
+        
+        //Go back button
         if ( part == 7 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 3;
         }
+        
+        //Change question
         if ( part == 7){
             ordernumber = parseInt(p.random(13));
         }
