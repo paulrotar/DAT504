@@ -47,6 +47,13 @@ instead of
 npm start
 
 ```
+Now go onto your mobile browser and enter your computer ip adress with :4200 at the end of it
+it should look something like this 
+
+```
+192.168.0.152:4200
+```
+
 
 If git is not installed, just download the zip file 
 
