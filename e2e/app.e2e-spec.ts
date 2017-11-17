@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('ng4-playground App', () => {
+describe('Consumption', () => {
   let page: AppPage;
 
   beforeEach(() => {

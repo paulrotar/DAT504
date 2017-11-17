@@ -1,6 +1,7 @@
 angular.module('example', [
   'angular-p5'
 ])
+
 .factory('exampleSketch', ['p5', function(p5) {
   return function(p) {
       var blue = "#212649" ;
