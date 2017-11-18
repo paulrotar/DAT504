@@ -100,7 +100,7 @@ Still no fix, hopefully there will be one in Version 1.04.
 Failed implementation of express. Continuing with the other targets.
 
 
-### Target for Version 1.04, final beta version for assignment upload
+### Target for Version 1.06, final beta version for assignment upload
 
 Implement express, do better graphics, Login system.
 
