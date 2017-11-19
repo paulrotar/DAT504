@@ -24,10 +24,14 @@
       ],
       "scripts": [
           "../bower_components/p5js/lib/p5.js",
+          "../bower_components/p5js/lib/p5.min.js",
+          "../bower_components/p5js/lib/addons/p5.sound.js",
+          "../bower_components/p5js/lib/addons/p5.dom.js",
           "../bower_components/angular/angular.js",
           "../bower_components/angular-load/dist/angular-load.min.js",
           "../bower_components/socket.io-client/dist/socket.io.js",
           "../node_modules/socket.io-client/dist/socket.io.js",
+          "../node_modules/jquery/dist/jquery.min.js",
           "../angular-p5.js",
           "./app/example.js"
       ],

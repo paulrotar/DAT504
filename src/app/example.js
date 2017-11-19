@@ -1,5 +1,3 @@
-
-
 angular.module('example', [
   'angular-p5'
 ])
@@ -8,6 +6,8 @@ angular.module('example', [
   return function(p) {
       
       //Creating colour scheme for design
+       
+     
       
       var blue = "#212649" ;
       var darkblue = "#191c37" ;
@@ -41,7 +41,28 @@ angular.module('example', [
       var guessorder = p.loadImage('/assets/guessorder.png');
       var saboteur = p.loadImage('/assets/saboteur.png');
       var tod = p.loadImage('/assets/tod.png');
-      var socket = io();
+      var soundonoff = p.loadImage('/assets/soundonoff.png');
+      var buttonon = p.loadImage('/assets/buttonon.png');
+     
+      //Sound Files
+      var applause;
+      var meow;
+      var cheering;
+      var moo;
+      var boo;
+      var woof;
+      var neigh;
+      var pageturn;
+      var pling;
+      var rooster;
+      var volumevalue = true;
+      
+      //express
+      var socket = io.connect('http://localhost:3000');
+      
+      //textes
+      var helptext;
+      var abouttext;
       
       //Shapes for graphics
       var rectlenght1;
@@ -49,10 +70,12 @@ angular.module('example', [
       var rectlenght3;
       var angle;
       var anglep;
+      
+      var input;
       var nicefont;
       var part = 1;
       var noprofile;
-      var url;
+      var urllog;
       var login;
       var name;
       var orderurl;
@@ -62,11 +85,14 @@ angular.module('example', [
    
    //Adapts screen resolution for phone/tablet users 
    if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ){
-           p.preload = function () {
+       
+       screen.orientation.lock('landscape');// should lock landscape orientation on mobile
+       
+       p.preload = function () {
                     nicefont = p.loadFont('/assets/GochiHand-Regular.ttf');
                     name = "nousername";
-                    /* url = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
-                     p.loadJSON(url,p.gotData) */
+                    /* urllog = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
+                     p.loadJSON(urllog,p.gotData) */
                     orderurl = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/consumptionOrder?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b'; // connecting to the databases
                     p.loadJSON(orderurl, p.gotOrder)  
                 };
@@ -358,12 +384,26 @@ angular.module('example', [
             
     //Requests data from database        
     p.preload = function() {
+        helptext = "The person who’s turn it is clicks on the screen and is given a random prompt (e.g Tallest to shortest). Everyone else lines up and the player then arranges the others in line with the given order. All the other players then have 3 tries to guess the order they are in. If they guess right the player does the forfeit, if they don’t guess right, everyone else does the forfeit.";
+        abouttext = "This game was developed by Dätmeister in 2017. Consumption will help you achieve all you need for Pre-Drinks, whether it’s to get Drunk, messy or to catch up with your already hammered friends, this game is for you. However drink responsibly!";
+        
+        applause = p.loadSound('/assets/sound/Applause.mp3');
+        meow = p.loadSound('/assets/sound/Cat.mp3');
+        cheering = p.loadSound('/assets/sound/Cheering.mp3');
+        moo = p.loadSound('/assets/sound/Cow.mp3');
+        boo = p.loadSound('/assets/sound/Crowd.mp3');
+        woof = p.loadSound('/assets/sound/Dog.mp3');
+        neigh = p.loadSound('/assets/sound/Horse.mp3');
+        pageturn = p.loadSound('/assets/sound/PageTurn.mp3');
+        pling = p.loadSound('/assets/sound/Pling.mp3');
+        rooster = p.loadSound('/assets/sound/Rooster.mp3');
+        
         nicefont = p.loadFont('/assets/GochiHand-Regular.ttf'); // loading font
         name = "nousername";
         
         //Login url
-       /* url = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
-        p.loadJSON(url,p.gotData) */
+        /* urllog = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
+        p.loadJSON(urllog,p.gotData) */
         
         //Alternative to express
         orderurl = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/consumptionOrder?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
@@ -371,10 +411,13 @@ angular.module('example', [
     }
       
     //Setup of the main webpage
-    p.setup = function() {
+    p.setup = function() {   
         
       //Create canvas    
-      p.createCanvas( screenwidth, screenheight);    
+      p.createCanvas( screenwidth, screenheight);  
+        
+      input = p.createInput();
+        
       p.noStroke(); // set no stroke for the whole project
       p.textFont(nicefont); // setting text font for the whole project
         rectlenght1 = 7;  //
@@ -390,6 +433,7 @@ angular.module('example', [
             
     // Looping throught the webpage
     p.draw = function() {
+        p.soundstate();
         p.background ( imagebg ); // setting background
         
         p.imageMode (p.CENTER);
@@ -430,7 +474,9 @@ angular.module('example', [
           order = orderdata;
       }
       
-      socket.on('questionsss', function(dataquest){
+    //express stuff  
+      
+      socket.on('questionss', function(dataquest){
     p.gotQuestions(dataquest);
       })
       
@@ -441,7 +487,7 @@ angular.module('example', [
     // Home page
     p.mainmenu = function() {
         //p.print(p.windowWidth + " spaceeee " + p.windowHeight);
-        
+        //p.print(neworder);
         p.textAlign( p.CENTER ); //Align all text
         p.textSize(70);
         p.fill(orange);
@@ -591,6 +637,14 @@ angular.module('example', [
         p.rectMode(p.CENTER);
         p.rect(screenwidth/2,250,500,5,5);
         p.rectMode(p.CORNER);
+        p.push();
+        p.translate(-399,-100)
+        p.fill(yellow);
+        p.textAlign(p.CENTER);
+        p.textSize(36);
+        p.text(abouttext,screenwidth/2,screenheight/2,800,500)
+        p.pop();
+        p.image(imgback, 414, 163);
     };
       
     //Play menu        
@@ -642,8 +696,20 @@ angular.module('example', [
       
     //Help menu
     p.instructions = function() {
+        p.fill ( orange );
+        p.text("Instructions",screenwidth/2,225);
+        p.fill(blue);
+        p.rectMode(p.CENTER);
+        p.rect(screenwidth/2,250,550,5,5);
+        p.rectMode(p.CORNER);
+        p.push();
+        p.translate(-399,-150)
         p.fill(yellow);
-        p.image(imgback,414, 163);
+        p.textAlign(p.CENTER);
+        p.textSize(36);
+        p.text(helptext,screenwidth/2,screenheight/2,800,500)
+        p.pop();
+        p.image(imgback, 414, 163);
     };
       
     //Options menu        
@@ -673,79 +739,151 @@ angular.module('example', [
         p.pop();
         
         
+        p.push();
+        p.imageMode(p.CENTER);
+        p.image(soundonoff,screenwidth/2,650);
+        p.pop();
+        if (volumevalue == true){
+            p.push();
+            p.imageMode(p.CENTER);
+            p.image(buttonon,796,650);
+            p.pop();
+        } 
+        if ( volumevalue == false){
+            p.push();
+            p.imageMode(p.CENTER);
+            p.image(buttonon,1123,650 );
+            p.pop();
+        }
+        p.text(p.mouseX + " " + p.mouseY , screenwidth/2, screenheight/2);
+        
     };
      
+    p.soundstate = function(){
+        if (volumevalue == true){
+            pageturn.setVolume(0.3);
+            applause.setVolume(0.1);
+            meow.setVolume(0.2);
+            cheering.setVolume(0.2);
+            moo.setVolume(0.2);
+            boo.setVolume(0.2);
+            woof.setVolume(0.2);
+            neigh.setVolume(0.2);
+            pling.setVolume(0.2);
+            rooster.setVolume(0.2);
+        } 
+        if ( volumevalue == false){
+            pageturn.setVolume(0);
+            applause.setVolume(0);
+            meow.setVolume(0);
+            cheering.setVolume(0);
+            moo.setVolume(0);
+            boo.setVolume(0);
+            woof.setVolume(0);
+            neigh.setVolume(0);
+            pling.setVolume(0);
+            rooster.setVolume(0);
+        }
+    }
+            
+     p.credentials = function(){
+        input.position(screenwidth/2,screenheight/2);
+        var name = input.value();
+        input.value('');
+    };    
+            
     //Profile menu        
     p.profile = function() {
         p.image(imgback,414, 163);
     };
-    
+            
     // If mouse pressed functions        
     p.mousePressed = function() {
         
         // If mouse pressed on about go to about
         if ( part == 1 && p.mouseX > 499 && p.mouseX < 765 && p.mouseY > 662 && p.mouseY < 760) {
             part = 2;
+            pageturn.play();
         }
         
         // If mouse pressed on play go to play
         if ( part == 1 && p.mouseX > 827 && p.mouseX < 1093 && p.mouseY > 662 && p.mouseY < 760) {
             part = 3;
+            pageturn.play();
         }
         
         // If mouse pressed on help go to help
         if ( part == 1 && p.mouseX > 1155 && p.mouseX < 1420 && p.mouseY > 662 && p.mouseY < 760) {
             part = 4;
+            pageturn.play();
         }
        
         // If mouse pressed on options go to options
         if ( part == 1 && p.mouseX > 1352 && p.mouseX < 1477 && p.mouseY > 185 && p.mouseY < 307) {
             part = 5;
+            pageturn.play();
         }
         
         // If mouse pressed on profile go to profile
         if ( part == 1 && p.mouseX > 433 && p.mouseX < 562 && p.mouseY > 185 && p.mouseY < 307) {
             part = 6;
+            pageturn.play();
         }
         
         //Go back button
         if ( part == 2 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
+            pageturn.play();
         }
         
         //Go back button
         if ( part == 3 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
+            pageturn.play();
         }
         
         //Guess the order game
         if ( part == 3 && p.mouseX > 511 && p.mouseX < 904 && p.mouseY > 319 && p.mouseY < 480 ) { 
             part = 7;
+            neigh.play();
         }
         
         //Go back button
         if ( part == 4 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
+            pageturn.play();
         }
         
         //Go back button
         if ( part == 5 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
+            pageturn.play();
+        }
+        
+        if ( part == 5 && p.mouseX > 663 && p.mouseX < 929 && p.mouseY > 601 && p.mouseY < 700){
+                volumevalue = true;
+            }
+        if ( part == 5 && p.mouseX > 990 && p.mouseX < 1256 && p.mouseY > 601 && p.mouseY < 700){
+                volumevalue = false;
         }
         
         //Go back button
         if ( part == 6 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 1;
+            pageturn.play();
         }
         
         //Go back button
         if ( part == 7 && p.mouseX > 414 && p.mouseX < 500 && p.mouseY > 163 && p.mouseY < 248) {
             part = 3;
+            boo.play();
         }
         
         //Change question
         if ( part == 7){
             ordernumber = parseInt(p.random(13));
+            meow.play();
+            
         }
         
         

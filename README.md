@@ -99,6 +99,14 @@ Still no fix, hopefully there will be one in Version 1.04.
 
 Failed implementation of express. Continuing with the other targets.
 
+# Version 1.04
+
+Added sound for the web version of Consumption app.
+
+*KNOWN ISSUES*
+When you try to click the profile button, there is a small square area where the click doesn't interact.
+This probblem appears on mobile too. It might be because an image block the click.
+Still no fix, hopefully there will be one in Version 1.06.
 
 ### Target for Version 1.06, final beta version for assignment upload
 
