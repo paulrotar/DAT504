@@ -114,8 +114,6 @@ Implement express, do better graphics, Login system.
 
 # Expected updates
 
-Express implementation in Version 1.04. - Failed to implement in Version 1.03b so we continue to develop other areas of our game. Sound is a good idea for Version 1.04. <br/>
-
 Improved dedicated mobile/tablet UI in Version 1.05.<br/>
 
 New button layout in Version 1.06. <br/>
