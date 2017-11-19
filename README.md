@@ -108,6 +108,20 @@ When you try to click the profile button, there is a small square area where the
 This probblem appears on mobile too. It might be because an image block the click.
 Still no fix, hopefully there will be one in Version 1.06.
 
+## Version 1.04b
+
+Improved gameplay in Guess the Order.
+Added a selection of drinks pulled from this online alcoholic cocktail database http://www.thecocktaildb.com/api/json/v1/1/random.php .
+
+*KNOWN ISSUES*
+When you try to click the profile button, there is a small square area where the click doesn't interact.
+This probblem appears on mobile too. It might be because an image block the click.
+<br/>
+If you abuse clicking in the Game section while sound is off, you will hear a random sound from time to time.
+<br/>
+When selecting a game, pressing between certain mouseX,Y positions, the Guess the Order game will be affected and you will instantly receive a loss.
+This can be fixed by pressing the Next prompt button. :) 
+
 ### Target for Version 1.06, final beta version for assignment upload
 
 Implement express, do better graphics, Login system.

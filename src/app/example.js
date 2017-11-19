@@ -43,6 +43,8 @@ angular.module('example', [
       var tod = p.loadImage('/assets/tod.png');
       var soundonoff = p.loadImage('/assets/soundonoff.png');
       var buttonon = p.loadImage('/assets/buttonon.png');
+      var lostmenu = p.loadImage('/assets/lostmenu.png');
+      var nextprompt = p.loadImage('/assets/nextprompt.png');
      
       //Sound Files
       var applause;
@@ -63,6 +65,11 @@ angular.module('example', [
       //textes
       var helptext;
       var abouttext;
+      var drinklink;
+      var cocktaillist;
+      var noanswer = true;
+      var welost = false;
+      var theylost = false;
       
       //Shapes for graphics
       var rectlenght1;
@@ -89,6 +96,21 @@ angular.module('example', [
        screen.orientation.lock('landscape');// should lock landscape orientation on mobile
        
        p.preload = function () {
+                    
+                    // Defining sounds
+                    applause = p.loadSound('/assets/sound/Applause.mp3');
+                    meow = p.loadSound('/assets/sound/Cat.mp3');
+                    cheering = p.loadSound('/assets/sound/Cheering.mp3');
+                    moo = p.loadSound('/assets/sound/Cow.mp3');
+                    boo = p.loadSound('/assets/sound/Crowd.mp3');
+                    woof = p.loadSound('/assets/sound/Dog.mp3');
+                    neigh = p.loadSound('/assets/sound/Horse.mp3');
+                    pageturn = p.loadSound('/assets/sound/PageTurn.mp3');
+                    pling = p.loadSound('/assets/sound/Pling.mp3');
+                    rooster = p.loadSound('/assets/sound/Rooster.mp3');
+    
+           
+           
                     nicefont = p.loadFont('/assets/GochiHand-Regular.ttf');
                     name = "nousername";
                     /* urllog = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
@@ -405,6 +427,10 @@ angular.module('example', [
         /* urllog = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
         p.loadJSON(urllog,p.gotData) */
         
+        //Linking to an online database that gives us a list of alcoholic cocktails 
+        drinklink = 'http://www.thecocktaildb.com/api/json/v1/1/random.php';
+        p.loadJSON(drinklink,p.gotDrinks);
+        
         //Alternative to express
         orderurl = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/consumptionOrder?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
         p.loadJSON(orderurl,p.gotOrder)
@@ -414,9 +440,7 @@ angular.module('example', [
     p.setup = function() {   
         
       //Create canvas    
-      p.createCanvas( screenwidth, screenheight);  
-        
-      input = p.createInput();
+      p.createCanvas( screenwidth, screenheight); 
         
       p.noStroke(); // set no stroke for the whole project
       p.textFont(nicefont); // setting text font for the whole project
@@ -433,7 +457,6 @@ angular.module('example', [
             
     // Looping throught the webpage
     p.draw = function() {
-        p.soundstate();
         p.background ( imagebg ); // setting background
         
         p.imageMode (p.CENTER);
@@ -462,6 +485,7 @@ angular.module('example', [
         if (part == 6 ) {
            p.profile();         // Profile page
        }
+        p.soundstate();
     };
       
       // Gets data from the login database
@@ -472,6 +496,10 @@ angular.module('example', [
       // Gets data from questions database
       p.gotOrder = function(orderdata){
           order = orderdata;
+      }
+      
+      p.gotDrinks = function(cocktails){
+          cocktaillist = cocktails;
       }
       
     //express stuff  
@@ -485,6 +513,35 @@ angular.module('example', [
       }
     
     // Home page
+      
+    p.soundstate = function(){
+        p.print(volumevalue);
+        if (volumevalue == true){
+            pageturn.setVolume(0.5);
+            applause.setVolume(0.1);
+            meow.setVolume(0.2);
+            cheering.setVolume(0.2);
+            moo.setVolume(0.2);
+            boo.setVolume(0.2);
+            woof.setVolume(0.2);
+            neigh.setVolume(0.2);
+            pling.setVolume(0.2);
+            rooster.setVolume(0.2);
+        } 
+        if ( volumevalue == false){
+            pageturn.setVolume(0.0);
+            applause.setVolume(0.0);
+            meow.setVolume(0.0);
+            cheering.setVolume(0.0);
+            moo.setVolume(0.0);
+            boo.setVolume(0.0);
+            woof.setVolume(0.0);
+            neigh.setVolume(0.0);
+            pling.setVolume(0.0);
+            rooster.setVolume(0.0);
+        }
+    };  
+      
     p.mainmenu = function() {
         //p.print(p.windowWidth + " spaceeee " + p.windowHeight);
         //p.print(neworder);
@@ -642,7 +699,7 @@ angular.module('example', [
         p.fill(yellow);
         p.textAlign(p.CENTER);
         p.textSize(36);
-        p.text(abouttext,screenwidth/2,screenheight/2,800,500)
+        p.text(abouttext,screenwidth/2,400,800,500)
         p.pop();
         p.image(imgback, 414, 163);
     };
@@ -689,9 +746,50 @@ angular.module('example', [
     
     //Guess the order game        
     p.game = function() {
-        p.fill(black);
-        p.text(order[ordernumber].question, screenwidth/2, screenheight/2);
+        p.push();
+        p.fill(orange);
+        p.textSize(44);
+        p.text("Arrange the opposing team in this order", screenwidth/2, 225);
+        p.pop();
+        p.fill(blue);
+        p.rectMode(p.CENTER);
+        p.rect(screenwidth/2,250,800,5,5);
+        p.rectMode(p.CORNER);
+        p.text(order[ordernumber].question, screenwidth/2, screenheight/2-130);
+        p.push();
+        p.translate(-500,-150);
+        p.fill(ishyellow);
+        p.textSize(50);
+        
+        if ( noanswer == true ){
+            welost = false;
+            thyelost = false;
+        p.text("Select the losing side", screenwidth/2, 650, 1000,400);
+        }
+        
+        if ( welost == true ){
+            theylost = false;
+            noanswer = false;
+        p.text("Loosers! All of you must drink a shot of " + cocktaillist.drinks[0].strDrink + "!", screenwidth/2, 650, 1000,400);
+        }
+        
+        if ( theylost == true ){
+            welost = false;
+            noanswer = false;
+        p.text("Haha, go make fun of them and give them some " + cocktaillist.drinks[0].strDrink + " to drink!", screenwidth/2, 650, 1000,400);
+        }
+        
+        p.pop();
         p.image(imgback,414, 163);
+        p.push();
+        p.imageMode(p.CENTER);
+        p.image(lostmenu,screenwidth/2,450);
+        p.pop();
+        p.push();
+        p.imageMode(p.CENTER);
+        p.image(nextprompt,screenwidth/2,700);
+        p.pop();
+        
     };
       
     //Help menu
@@ -755,46 +853,14 @@ angular.module('example', [
             p.image(buttonon,1123,650 );
             p.pop();
         }
-        p.text(p.mouseX + " " + p.mouseY , screenwidth/2, screenheight/2);
         
     };
-     
-    p.soundstate = function(){
-        if (volumevalue == true){
-            pageturn.setVolume(0.3);
-            applause.setVolume(0.1);
-            meow.setVolume(0.2);
-            cheering.setVolume(0.2);
-            moo.setVolume(0.2);
-            boo.setVolume(0.2);
-            woof.setVolume(0.2);
-            neigh.setVolume(0.2);
-            pling.setVolume(0.2);
-            rooster.setVolume(0.2);
-        } 
-        if ( volumevalue == false){
-            pageturn.setVolume(0);
-            applause.setVolume(0);
-            meow.setVolume(0);
-            cheering.setVolume(0);
-            moo.setVolume(0);
-            boo.setVolume(0);
-            woof.setVolume(0);
-            neigh.setVolume(0);
-            pling.setVolume(0);
-            rooster.setVolume(0);
-        }
-    }
-            
-     p.credentials = function(){
-        input.position(screenwidth/2,screenheight/2);
-        var name = input.value();
-        input.value('');
-    };    
+               
             
     //Profile menu        
     p.profile = function() {
         p.image(imgback,414, 163);
+       // p.credentials();
     };
             
     // If mouse pressed functions        
@@ -844,8 +910,14 @@ angular.module('example', [
         
         //Guess the order game
         if ( part == 3 && p.mouseX > 511 && p.mouseX < 904 && p.mouseY > 319 && p.mouseY < 480 ) { 
+            if ( volumevalue === false ){
+                neigh.setVolume(0.0);
+            }
             part = 7;
             neigh.play();
+            noanswer = true;
+            welost = false;
+            theylost = false;
         }
         
         //Go back button
@@ -863,6 +935,7 @@ angular.module('example', [
         if ( part == 5 && p.mouseX > 663 && p.mouseX < 929 && p.mouseY > 601 && p.mouseY < 700){
                 volumevalue = true;
             }
+        
         if ( part == 5 && p.mouseX > 990 && p.mouseX < 1256 && p.mouseY > 601 && p.mouseY < 700){
                 volumevalue = false;
         }
@@ -878,14 +951,30 @@ angular.module('example', [
             part = 3;
             boo.play();
         }
-        
-        //Change question
-        if ( part == 7){
-            ordernumber = parseInt(p.random(13));
-            meow.play();
-            
+        if ( part == 7 && p.mouseX > 662 && p.mouseX < 929 && p.mouseY > 400 && p.mouseY < 499) {
+            welost = true;
+            noanswer = false;
+            theylost = false
         }
         
+        if ( part == 7 && p.mouseX > 990 && p.mouseX < 1254 && p.mouseY > 400 && p.mouseY < 499) {
+            theylost = true;
+            welost = false;
+            noanswer = false;
+        }
+        
+        //Change question
+        if ( part == 7 && p.mouseX > 827 && p.mouseX < 1092 && p.mouseY > 653 && p.mouseY < 750){
+            if(volumevalue === false ){
+                meow.setVolume(0.0);
+            }
+            ordernumber = parseInt(p.random(13));
+            meow.play();
+            p.preload();
+            noanswer = true;
+            welost = false;
+            theylost = false;
+        }
         
     };
     
