@@ -124,7 +124,8 @@ This can be fixed by pressing the Next prompt button. :)
 
 # Version 1.05
 
-Improved movile UI
+Improved mobile UI.
+Finished app for submission.
 
 *KNOWN ISSUES*
 When you try to click the profile button, there is a small square area where the click doesn't interact.
