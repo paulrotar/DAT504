@@ -122,12 +122,43 @@ If you abuse clicking in the Game section while sound is off, you will hear a ra
 When selecting a game, pressing between certain mouseX,Y positions, the Guess the Order game will be affected and you will instantly receive a loss.
 This can be fixed by pressing the Next prompt button. :) 
 
-### Target for Version 1.06, final beta version for assignment upload
+# Version 1.05
 
-Implement express, do better graphics, Login system.
+Improved movile UI
 
-# Expected updates
+*KNOWN ISSUES*
+When you try to click the profile button, there is a small square area where the click doesn't interact.
+This probblem appears on mobile too. It might be because an image block the click.
+<br/>
+If you abuse clicking in the Game section while sound is off, you will hear a random sound from time to time.
+<br/>
+When selecting a game, pressing between certain mouseX,Y positions, the Guess the Order game will be affected and you will instantly receive a loss.
+This can be fixed by pressing the Next prompt button. :)
 
-Improved dedicated mobile/tablet UI in Version 1.05.<br/>
+# Submission achievements
+
+Aimed to have a professional design.
+<br/>
+Contextual reasoning
+<br/>
+Version control
+<br/>
+Inclusion of some API
+<br/>
+Connecting to other database alredy existent.
+
+# Submission failures 
+
+MAN stack not MEAN stack :(
+Express connection through socket.io failed. 
+Login connection failure to mlab database.
+
+# Expected updates and improvements
 
 New button layout in Version 1.06. <br/>
+New dedicated UI in Version 1.1 <br/>
+Implement express and login system in Version 1.2 <br/>
+Launch app on App Store and Google Play in Version 1.25 <br/>
+
+# Consumption team
+Euan Latimer, Will Mellor, Paul Rotar, Angus Davidson, Andrew Dunne

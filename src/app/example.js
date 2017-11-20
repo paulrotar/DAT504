@@ -97,6 +97,9 @@ angular.module('example', [
        
        p.preload = function () {
                     
+                    //text for about page
+                    abouttext = "This game was developed by Dätmeister in 2017. Consumption will help you achieve all you need for Pre-Drinks, whether it’s to get Drunk, messy or to catch up with your already hammered friends, this game is for you. However drink responsibly!";
+           
                     // Defining sounds
                     applause = p.loadSound('/assets/sound/Applause.mp3');
                     meow = p.loadSound('/assets/sound/Cat.mp3');
@@ -115,6 +118,12 @@ angular.module('example', [
                     name = "nousername";
                     /* urllog = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/login?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b';
                      p.loadJSON(urllog,p.gotData) */
+           
+                    //Linking to an online database that gives us a list of alcoholic cocktails 
+                    drinklink = 'http://www.thecocktaildb.com/api/json/v1/1/random.php';
+                    p.loadJSON(drinklink,p.gotDrinks);         
+                    
+                    //Alternative to express
                     orderurl = 'https://api.mlab.com/api/1/databases/paulrotardb/collections/consumptionOrder?apiKey=LB-XNdkgi7CtjESs60AEZQLTP7PRAR1b'; // connecting to the databases
                     p.loadJSON(orderurl, p.gotOrder)  
                 };
@@ -155,10 +164,45 @@ angular.module('example', [
                     if (part == 6) {
                         p.profile();
                     }
+                    p.soundstate();
+                    p.print(p.mouseX + " " + p.mouseY);
                 };
                 p.gotOrder = function (orderdata) {
                     order = orderdata;
                 };
+       
+                p.gotDrinks = function(cocktails){
+                    cocktaillist = cocktails;
+                }
+                
+                p.soundstate = function(){
+                    //p.print(volumevalue);
+                    if (volumevalue == true){
+                        pageturn.setVolume(0.5);
+                        applause.setVolume(0.1);
+                        meow.setVolume(0.2);
+                        cheering.setVolume(0.2);
+                        moo.setVolume(0.2);
+                        boo.setVolume(0.2);
+                        woof.setVolume(0.2);
+                        neigh.setVolume(0.2);
+                        pling.setVolume(0.2);
+                        rooster.setVolume(0.2);
+                    } 
+                    if ( volumevalue == false){
+                        pageturn.setVolume(0.0);
+                        applause.setVolume(0.0);
+                        meow.setVolume(0.0);
+                        cheering.setVolume(0.0);
+                        moo.setVolume(0.0);
+                        boo.setVolume(0.0);
+                        woof.setVolume(0.0);
+                        neigh.setVolume(0.0);
+                        pling.setVolume(0.0);
+                        rooster.setVolume(0.0);
+                    }
+                };
+       
                 // Positioning all the assets and resizing them to fit to mobile screens 
                 p.mainmenu = function () {
                     //p.print(p.mouseX + "  " + p.mouseY); // shows the mouse positoning so we can get the locations of where we need to make on button clicks/ position assests
@@ -221,7 +265,8 @@ angular.module('example', [
                         p.text("Hello " + name + "!", screenwidth / 2, 32);
                     }
                     p.pop();
-
+                    
+                    //login try
                     /*  for( var i=0; i<login.length; i++){
                           if (login[i].username === "paulrotar"){
                               p.print("hello paul");
@@ -233,9 +278,7 @@ angular.module('example', [
                 };
                 // set up for the about page then changing the assests to fit on the page
                 p.about = function () {
-                    p.fill(black);
-                    p.text("This game was developed by Dätmester in 2017", screenwidth / 2, screenheight / 2);
-
+                    
                     p.push
                     p.image(imgback, 32, 33);
                     imgback.resize(87 / 1.4, 87 / 1.4)
@@ -243,11 +286,19 @@ angular.module('example', [
 
 
                     p.fill(orange);
+                    p.push();
+                    p.textSize(40);
                     p.text("About", screenwidth / 2, 60);
+                    p.pop();
                     p.fill(blue);
                     p.rectMode(p.CENTER);
                     p.rect(screenwidth / 2, 70, 500, 5, 5);
                     p.rectMode(p.CORNER);
+                    p.text(  "This game was developed by Dätmeister in 2017. Consumption will help you achieve" , screenwidth / 2, screenheight / 2-40);
+                    p.text(  "all you need for Pre-Drinks, whether it's to get Drunk, messy or to catch up" , screenwidth / 2, screenheight / 2-10);
+                    p.text(  "with your already hammered friends, this game is for you." , screenwidth / 2, screenheight / 2+20);
+                    p.text(  "However, DRINK RESPONSIBLY!" , screenwidth / 2, screenheight / 2+50);
+                    
                 };
                 // set up for the play page then changing the assests to fit on the page
                 p.play = function () {
@@ -297,10 +348,55 @@ angular.module('example', [
                 };
                 // set up for the  game then changing the assests to fit on the page
                 p.game = function () {
-                    p.fill(black);
-                    p.text(order[ordernumber].question, screenwidth / 2, screenheight / 2);
+                    p.fill(orange);
+                    p.push();
+                    p.textSize(30);
+                    p.text("Arrange the opposing team in this order", screenwidth / 2, 40);
+                    p.pop();
+                    p.fill(blue);
+                    p.rectMode(p.CENTER);
+                    p.rect(screenwidth / 2, 60, 500, 5, 5);
+                    p.rectMode(p.CORNER);
+                    p.push();
+                    p.textSize(40);
+                    p.text(order[ordernumber].question, screenwidth/2, screenheight/2-80);
+                    p.pop();
+                    p.push();
+                    p.translate(-305,0)
+                    p.fill(ishyellow);
+                    p.textSize(30);
+
+                    if ( noanswer == true ){
+                        welost = false;
+                        theylost = false;
+                    p.text("Select the losing side", screenwidth/2 + 170, screenheight/2 +10, 300,900);
+                    }
+
+                    if ( welost == true ){
+                        theylost = false;
+                        noanswer = false;
+                    p.text("Loosers! All of you must drink a shot of " + cocktaillist.drinks[0].strDrink + "!", screenwidth/2, screenheight/2 + 10, 600,2000);
+                    }
+
+                    if ( theylost == true ){
+                        welost = false;
+                        noanswer = false;
+                    p.text("Haha, go make fun of them and give them some " + cocktaillist.drinks[0].strDrink + " to drink!", screenwidth/2, screenheight/2 + 10, 600,2000);
+                    }
+
+                    p.pop();
                     p.image(imgback, 32, 36);
-                    imgback.resize(87 / 1.4, 87 / 1.4)
+                    imgback.resize(87 / 1.4, 87 / 1.4);
+                    p.push();
+                    p.imageMode(p.CENTER);
+                    p.image(lostmenu,screenwidth/2,screenheight/2-20);
+                    lostmenu.resize(673 / 1.6, 147 / 2);
+                    p.pop();
+                    p.push();
+                    p.imageMode(p.CENTER);
+                    p.image(nextprompt,screenwidth/2,screenheight/2 + 140);
+                    nextprompt.resize( 399 / 2, 167 / 2)
+                    p.pop();
                 };
                 // set up for the instuctionS, then changing the assests to fit on the page
                 p.instructions = function () {
@@ -318,7 +414,10 @@ angular.module('example', [
                     p.image(imgback, 32, 36);
                     imgback.resize(87 / 1.4, 87 / 1.4)
                     p.fill(orange);
+                    p.push();
+                    p.textSize(40);
                     p.text("Options", screenwidth / 2, 40);
+                    p.pop();
                     p.fill(blue);
                     p.rectMode(p.CENTER);
                     p.rect(screenwidth / 2, 60, 500, 5, 5);
@@ -327,19 +426,36 @@ angular.module('example', [
                     p.fill(blue);
                     p.textSize(37);
                     p.text("Color blind modes", screenwidth / 2, 120);
-                    p.text("Sound effects/Music", screenwidth / 2, 160);
+                    p.text("Sound effects/Music", screenwidth / 2, 280);
                     p.pop();
 
                     p.push();
                     p.imageMode(p.CENTER);
-                    p.image(colorm, screenwidth / 2, screenheight / 2 + 40);
+                    p.image(colorm, screenwidth / 2, screenheight / 2 );
                     colorm.resize(928 / 1.4, 103 / 1.4)
-                    if (p.mouseX > 40 && p.mouseX < 704 && p.mouseY > 213 && p.mouseY < 278) {
-                        p.image(available, screenwidth / 2, screenheight / 2 + 40);
+                    if (p.mouseX > 40 && p.mouseX < 704 && p.mouseY > 173 && p.mouseY < 238) {
+                        p.image(available, screenwidth / 2, screenheight / 2 );
                         available.resize(815 / 1.4, 59 / 1.4)
                     }
                     p.pop();
-
+                            
+                    p.push();
+                    p.imageMode(p.CENTER);
+                    p.image(soundonoff,screenwidth/2,350);
+                    
+                    p.pop();
+                    if (volumevalue == true){
+                        p.push();
+                        p.imageMode(p.CENTER);
+                        p.image(buttonon,201.5,350);
+                        p.pop();
+                    } 
+                    if ( volumevalue == false){
+                        p.push();
+                        p.imageMode(p.CENTER);
+                        p.image(buttonon,528,350 );
+                        p.pop();
+                    }
                 };
                 // set up for the profile then changing the assests to fit on the page
                 p.profile = function () {
@@ -353,52 +469,101 @@ angular.module('example', [
 
                     if (part == 1 && p.mouseX > 20 && p.mouseX < 218 && p.mouseY > 297 && p.mouseY < 374) {
                         part = 2;
+                        pageturn.play();
                     }
 
                     if (part == 1 && p.mouseX > 267 && p.mouseX < 465 && p.mouseY > 294 && p.mouseY < 364) {
                         part = 3;
+                        pageturn.play();
                     }
 
                     if (part == 1 && p.mouseX > 513 && p.mouseX < 720 && p.mouseY > 293 && p.mouseY < 370) {
                         part = 4;
+                        pageturn.play();
                     }
 
                     if (part == 1 && p.mouseX > 603 && p.mouseX < 723 && p.mouseY > 14 && p.mouseY < 129) {
                         part = 5;
+                        pageturn.play();
                     }
 
                     if (part == 1 && p.mouseX > 11 && p.mouseX < 128 && p.mouseY > 12 && p.mouseY < 129) {
                         part = 6;
+                        pageturn.play();
                     }
 
                     if (part == 2 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
                         part = 1;
+                        pageturn.play();
                     }
 
                     if (part == 3 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
                         part = 1;
+                        pageturn.play();
                     }
 
                     if (part == 3 && p.mouseX > 77 && p.mouseX < 357 && p.mouseY > 112 && p.mouseY < 224) {
+                        if ( volumevalue === false ){
+                            neigh.setVolume(0.0);
+                        }
                         part = 7;
+                        neigh.play();
+                        noanswer = true;
+                        welost = false;
+                        theylost = false;
                     }
 
                     if (part == 4 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
                         part = 1;
+                        pageturn.play();
                     }
 
                     if (part == 5 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
                         part = 1;
+                        pageturn.play();
                     }
 
+                    if ( part == 5 && p.mouseX > 71 && p.mouseX < 334 && p.mouseY > 301 && p.mouseY < 397){
+                            volumevalue = true;
+                        }
+
+                    if ( part == 5 && p.mouseX > 396 && p.mouseX < 660 && p.mouseY > 301 && p.mouseY < 397){
+                            volumevalue = false;
+                    }
+                    
                     if (part == 6 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
                         part = 1;
+                        pageturn.play();
                     }
+                    
                     if (part == 7 && p.mouseX > 35 && p.mouseX < 90 && p.mouseY > 34 && p.mouseY < 92) {
                         part = 3;
+                        boo.play();
                     }
-                    if (part == 7) {
+                    
+                    if ( part == 7 && p.mouseX > 173 && p.mouseX < 343 && p.mouseY > 185 && p.mouseY < 226) {
+                        welost = true;
+                        noanswer = false;
+                        theylost = false
+                    }
+
+                    if ( part == 7 && p.mouseX > 388 && p.mouseX < 574 && p.mouseY > 151 && p.mouseY < 219) {
+                        theylost = true;
+                        welost = false;
+                        noanswer = false;
+                    }
+                    
+                    
+                    if (part == 7 && p.mouseX > 267 && p.mouseX < 464 && p.mouseY > 306 && p.mouseY < 385) {
+                        if(volumevalue === false ){
+                            meow.setVolume(0.0);
+                        }
                         ordernumber = parseInt(p.random(13));
+                        meow.play();
+                        p.preload();
+                        noanswer = true;
+                        welost = false;
+                        theylost = false;
                     }
 
                 };
@@ -515,7 +680,7 @@ angular.module('example', [
     // Home page
       
     p.soundstate = function(){
-        p.print(volumevalue);
+        //p.print(volumevalue);
         if (volumevalue == true){
             pageturn.setVolume(0.5);
             applause.setVolume(0.1);
@@ -763,7 +928,7 @@ angular.module('example', [
         
         if ( noanswer == true ){
             welost = false;
-            thyelost = false;
+            theylost = false;
         p.text("Select the losing side", screenwidth/2, 650, 1000,400);
         }
         
