@@ -149,8 +149,8 @@ Connecting to other database alredy existent.
 
 # Submission failures 
 
-MAN stack not MEAN stack :(
-Express connection through socket.io failed. 
+MAN stack not MEAN stack :( <br/>
+Express connection through socket.io failed. <br/> 
 Login connection failure to mlab database.
 
 # Expected updates and improvements
